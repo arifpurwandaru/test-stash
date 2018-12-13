@@ -47,7 +47,8 @@ class PendaftaranController extends Controller
 
         try {
             $matchThese = ['jadwal_pendaftaran' => $request->jadwal_pendaftaran, 
-                        'pasienid' => $request->pasienid];
+                        'pasienid' => $request->pasienid,
+                    'sesi'=>$request->sesi];
 
             $vald = Tpendaftaran::where($matchThese)->get();
             if(!$vald->isEmpty()){
@@ -78,9 +79,9 @@ class PendaftaranController extends Controller
             $asdf = DB::select("select mp.nama,tp.no_urut,tp.status_antrian, tp.jadwal_pendaftaran,tp.id 
                 from tpendaftarans tp 
                 inner join mpasiens mp on mp.pasienid = tp.pasienid
-                where tp.jadwal_pendaftaran=? and tp.loginid=?
+                where tp.jadwal_pendaftaran=? and tp.loginid=? and tp.sesi=?
                 order by tp.no_urut asc",
-                [$request->jadwal_pendaftaran, $request->loginid]);
+                [$request->jadwal_pendaftaran, $request->loginid, $request->sesi]);
 
                 if($asdf==null){
                     $resp->respCode = Constants::RESP_DATA_NOTFOUND_CODE;
@@ -101,14 +102,18 @@ class PendaftaranController extends Controller
        return response()->json($resp);
     }
 
-    public function retrieveStatusAntrean($tgl){
+    public function retrieveStatusAntrean($tgl,$sesiid){
         $resp = new CommonResponse();
         try{
             $antInfo = new AntrianInfo();
             $matchThese = ['jadwal_pendaftaran' => $tgl, 
+                        'sesi'=>$sesiid,
                         'status_antrian' => '0'];
             $tpn = Tpendaftaran::where($matchThese)->min('no_urut');
-            $tot = Tpendaftaran::where('jadwal_pendaftaran',$tgl)->max('no_urut');
+            
+            $listwhere = ['jadwal_pendaftaran' => $tgl, 
+                        'sesi'=>$sesiid];
+            $tot = Tpendaftaran::where($listwhere)->max('no_urut');
             if($tpn!=null && $tot!=null){
                 $antInfo->current = $tpn;
                 $antInfo->total = $tot;
@@ -134,15 +139,15 @@ class PendaftaranController extends Controller
         return response()->json($resp);
     }
 
-    public function getAllAntrianByDateAndStatus($tgl,$status){
+    public function getAllAntrianByDateAndStatus($tgl,$status,$sesi){
         $resp = new CommonResponse();
         try{
             $asdf = DB::select("select p.*, ps.nama, ps.imgLink, ps.alamatLengkap, ps.jenisKelamin, ps.golonganDarah, ps.nik 
                         from tpendaftarans p
                         inner join mpasiens ps on ps.pasienid = p.pasienid
-                        where p.jadwal_pendaftaran=? and p.status_antrian=?
+                        where p.jadwal_pendaftaran=? and p.status_antrian=? and p.sesi=?
                         order by p.no_urut asc",
-                        [$tgl,$status]);
+                        [$tgl,$status,$sesi]);
            /*  $matchThese = ['jadwal_pendaftaran' => $tgl, 
                         'status_antrian' => $status];
             $tpn = Tpendaftaran::where($matchThese)->get(); */

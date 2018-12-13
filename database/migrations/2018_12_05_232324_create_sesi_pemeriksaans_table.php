@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMjadwalParentsTable extends Migration
+class CreateSesiPemeriksaansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateMjadwalParentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('mjadwal_parents', function (Blueprint $table) {
-            $table->integer('id');
-            $table->string('hari',50);
-            $table->primary("id");
+        Schema::create('sesi_pemeriksaans', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('mjadwal_parent_id');
+            $table->string('tempat',100);
+            $table->string('mulai',10);
+            $table->string('selesai',10);
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateMjadwalParentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mjadwal_parents');
+        Schema::dropIfExists('sesi_pemeriksaans');
     }
 }

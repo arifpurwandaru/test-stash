@@ -26,7 +26,8 @@ class CreateTpendaftaransTable extends Migration
             $table->string('catatan_medis',300)->nullable();
             $table->string('diagnosa_penyakit',300)->nullable();
             $table->string('obat',300)->nullable();
-            $table->string('jadwal_pendaftaran')->nullable();
+            $table->string('jadwal_pendaftaran');
+            $table->integer('sesi');
             $table->timestamps();
             $table->primary('id');
         });

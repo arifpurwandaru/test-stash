@@ -31,12 +31,12 @@ Route::get('mpasien/{loginid}','MpasienController@getByLoginId');
 Route::get('mpasien/getOne/{pasienid}','MpasienController@getOne');
 Route::post('mpasien/update','MpasienController@update');
 
-Route::post('mjadwal','MjadwalController@store');
-Route::post('mjadwal/saveAll','MjadwalController@saveParent');
+Route::post('mjadwal/simpanJadwal','MjadwalController@simpanJadwal');
 Route::get('mjadwal','MjadwalController@index');
 Route::get('mjadwal/getAllMjadwal','MjadwalController@getAllMjadwal');
 Route::get('mjadwal/getOne/{parentId}','MjadwalController@getOneWithChildren');
 Route::get('mjadwal/genocide/{parentId}','MjadwalController@deleteAndGenocide');
+Route::get('mjadwal/deleteSesi/{sesiId}','MjadwalController@deleteSesi');
 Route::get('mjadwal/getByTgl/{tgl}','MjadwalController@getByTgl');
 
 Route::post('tpendaftaran','PendaftaranController@store');
@@ -45,9 +45,9 @@ Route::post('tpendaftaran/getAllPendaftarByLoginIdAndTgl','PendaftaranController
 Route::post('tpendaftaran/updateDoneTrx','PendaftaranController@updateDoneTrx');
 Route::post('tpendaftaran/resubmitPendaftaran','PendaftaranController@resubmitPendaftaran');
 Route::post('tpendaftaran/perbaharuiDonePasien','PendaftaranController@perbaharuiDonePasien');
-Route::get('tpendaftaran/retrieveStatusAntrean/{tgl}','PendaftaranController@retrieveStatusAntrean');
+Route::get('tpendaftaran/retrieveStatusAntrean/{tgl}/{sesiid}','PendaftaranController@retrieveStatusAntrean');
 Route::get('tpendaftaran','PendaftaranController@index');
-Route::get('tpendaftaran/getAllAntrianByDateAndStatus/{tgl}/{status}','PendaftaranController@getAllAntrianByDateAndStatus');
+Route::get('tpendaftaran/getAllAntrianByDateAndStatus/{tgl}/{status}/{sesi}','PendaftaranController@getAllAntrianByDateAndStatus');
 Route::get('tpendaftaran/getRiwayatKunjunganTerakhir/{loginid}','PendaftaranController@getRiwayatKunjunganTerakhir');
 Route::get('tpendaftaran/getDetailRiwayatPemeriksaan/{loginid}/{tgl}','PendaftaranController@getDetailRiwayatPemeriksaan');
 Route::get('tpendaftaran/aktifkanKembali/{id}','PendaftaranController@aktifkanKembali');

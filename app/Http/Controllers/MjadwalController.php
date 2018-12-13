@@ -7,15 +7,117 @@ use App\Mjadwal;
 use App\CommonResponse;
 use App\Constants;
 use App\MjadwalParent;
-
+use App\SesiPemeriksaan;
+use Illuminate\Support\Facades\Log;
+use \Datetime;
 class MjadwalController extends Controller
 {
+    function simpanJadwal(Request $request){
+        $resp = new CommonResponse();
+        $resp->respCode = Constants::RESP_SUCCESS_CODE;
+        $resp->respDesc = Constants::RESP_SUCCESS_DESC;
+        try{
+            //Validasi
+            $datas = $request->datas;
+            foreach($datas as $ramane){
+                $sesip = $ramane['sesis'][0];
+                try{
+                    $setar = new DateTime($sesip['mulai']);
+                    $eeen = new DateTime($sesip['selesai']);
+                    if($setar >= $eeen){
+                        $resp->respCode = Constants::RESP_SESI_JAMKEBALIK_CODE;
+                        $resp->respDesc = Constants::RESP_SESI_JAMKEBALIK_DESC;
+                        return response()->json($resp);
+                    }
+                }catch(\Exception $e){
+                    $resp->respCode = Constants::RESP_SESI_JAMNGAWUR_CODE;
+                    $resp->respDesc = Constants::RESP_SESI_JAMNGAWUR_DESC;
+                    return response()->json($resp);
+                }
+                    
+                    $cil = SesiPemeriksaan::where("mjadwal_parent_id",$ramane['id'])->get();
+                    if($cil !=null && !$cil->isEmpty()){
+                        foreach($cil as $sesi){
+                            if($this->checkHourBetween($sesi->mulai,$sesi->selesai,$sesip['mulai'])
+                            || $this->checkHourBetween($sesi->mulai,$sesi->selesai,$sesip['selesai'])
+                            || $this->checkHourBetween($sesip['mulai'],$sesip['selesai'], $sesi->mulai)
+                            || $this->checkHourBetween($sesip['mulai'],$sesip['selesai'], $sesi->selesai)
+                            || $sesip['mulai'] == $sesi->mulai || $sesip['selesai']==$sesi->selesai
+                            ){
+                                $resp->respCode = Constants::RESP_SESI_EXIST_CODE;
+                                $resp->respDesc = Constants::RESP_SESI_EXIST_DESC;
+                                //$resp->data = $cil;
+                                return response()->json($resp);
+                            } 
+                        }
+                    }
+            }
+
+            //Lolos Validasi
+            foreach($datas as $jangkrikbos){
+                $jamb = MjadwalParent::where("id",$jangkrikbos['id'])->first();
+                if($jamb == null){
+                    MjadwalParent::create($jangkrikbos);
+                }
+                $bledug = $jangkrikbos['sesis'][0];
+                SesiPemeriksaan::create($bledug);
+            }
+
+        }catch (\Illuminate\Database\QueryException $e) {
+            $resp -> respCode = Constants::RESP_DB_ERROR_CODE;
+            $resp -> respDesc = $e->getMessage();
+            Log::error($e);
+        } catch (\Exception $e) {
+            $resp -> respCode = Constants::RESP_GENERAL_ERROR_CODE;
+            $resp -> respDesc = $e->getMessage();
+            Log::error($e);
+        }
+        
+        return response()->json($resp);
+    }
+     function checkHourBetween($start,$end,$tryme){
+        $startDt = new DateTime($start);
+        $endDt = new DateTime($end);
+        $trymeDt = new DateTime($tryme);
+        if($trymeDt > $startDt && $trymeDt < $endDt){
+            return true;
+        }else{
+            return false;
+        }
+     }
+
+     function getOneWithChildren($parentId){
+        $resp = new CommonResponse();
+        try{
+            $result =  MjadwalParent::with(['sesis' => function ($q) {
+                $q->orderBy('mulai', 'asc');
+              }])->where('id',$parentId)->first();
+            $resp->respCode = Constants::RESP_SUCCESS_CODE;
+            $resp->data = $result;
+            if($result == null){
+                $resp->respCode = Constants::RESP_DATA_NOTFOUND_CODE;
+                $resp->respDesc = Constants::RESP_DATA_NOTFOUND_DESC;
+            }
+        }catch (\Illuminate\Database\QueryException $e) {
+            $resp -> respCode = Constants::RESP_DB_ERROR_CODE;
+            $resp -> respDesc = $e->getMessage();
+        } catch (\Exception $e) {
+            $resp -> respCode = Constants::RESP_GENERAL_ERROR_CODE;
+            $resp -> respDesc = $e->getMessage();
+        }
+        return response()->json($resp);
+    }
+
+
     function index(){
         $resp = new CommonResponse();
         try{
             $resp->respCode = Constants::RESP_SUCCESS_CODE;
             $resp->respDesc = Constants::RESP_SUCCESS_DESC;
-            $resp->data = MjadwalParent::all();
+            /* foreach($listparent as $rmn){
+                $rmn->sesis = SesiPemeriksaan::where('mjadwal_parent_id',$rmn->id)->get();
+            } */
+            $resp->data = MjadwalParent::with('sesis')->get();
         }catch (\Illuminate\Database\QueryException $e) {
             $resp -> respCode = Constants::RESP_DB_ERROR_CODE;
             $resp -> respDesc = $e->getMessage();
@@ -27,33 +129,21 @@ class MjadwalController extends Controller
         return response()->json($resp);
     }
 
-    function getOneWithChildren($parentId){
-        $resp = new CommonResponse();
-        try{
-            $parent = MjadwalParent::with('jadwals')->where('id',$parentId)->first();
-            $resp->data = $parent;
-            $resp->respCode = Constants::RESP_SUCCESS_CODE;
-        }catch (\Illuminate\Database\QueryException $e) {
-            $resp -> respCode = Constants::RESP_DB_ERROR_CODE;
-            $resp -> respDesc = $e->getMessage();
-        } catch (\Exception $e) {
-            $resp -> respCode = Constants::RESP_GENERAL_ERROR_CODE;
-            $resp -> respDesc = $e->getMessage();
-        }
-        return response()->json($resp);
-    }
-
     function deleteAndGenocide($parentId){
         $resp = new CommonResponse();
         try{
-            $parent = MjadwalParent::with('jadwals')->where('id',$parentId)->first();
+            $parent = MjadwalParent::with('jadwals','sesis')->where('id',$parentId)->first();
             foreach ($parent->jadwals as $jadwal) {
                 $jadwal->delete();
             }
+            foreach($parent->sesis as $sesip){
+                $sesip->delete();
+            }
+            
             $parent->delete(); 
             $resp->respCode = Constants::RESP_SUCCESS_CODE;
             $resp->respDesc = Constants::RESP_SUCCESS_DESC;
-            $resp->data = MjadwalParent::all();
+            $resp->data = MjadwalParent::with('sesis')->get();
         }catch (\Illuminate\Database\QueryException $e) {
             $resp -> respCode = Constants::RESP_DB_ERROR_CODE;
             $resp -> respDesc = $e->getMessage();
@@ -64,26 +154,16 @@ class MjadwalController extends Controller
         return response()->json($resp);
     }
 
-    function store(Request $request){
-       return Mjadwal::create($request->all()); 
-    }
-
-    function saveParent(Request $request){
+    
+    function deleteSesi($sesiId){
         $resp = new CommonResponse();
-        $resp->data = $request->data;
         try{
+            $zesi = SesiPemeriksaan::where('id',$sesiId)->first();
+            $parentId = $zesi->mjadwal_parent_id;
+            $zesi->delete(); 
             $resp->respCode = Constants::RESP_SUCCESS_CODE;
             $resp->respDesc = Constants::RESP_SUCCESS_DESC;
-
-            $parent = $request->data;
-            $savedParent = MjadwalParent::create($parent);
-            $jadwals = [];
-            foreach ($request->data['jadwals'] as $jdw) {
-                $jadwals[] = new Mjadwal($jdw);
-            }
-            $savedParent->jadwals()->saveMany($jadwals);
-            $savedParent->jadwals = $jadwals;
-            $resp->data = $savedParent;
+            $resp->data = MjadwalParent::with('sesis')->where('id',$parentId)->first();
         }catch (\Illuminate\Database\QueryException $e) {
             $resp -> respCode = Constants::RESP_DB_ERROR_CODE;
             $resp -> respDesc = $e->getMessage();
@@ -93,6 +173,25 @@ class MjadwalController extends Controller
         }
         return response()->json($resp);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     

@@ -8,6 +8,15 @@ class Constants{
     const RESP_DATA_NOTFOUND_CODE = "01";
     const RESP_DATA_NOTFOUND_DESC = "Data not found";
 
+    const RESP_SESI_EXIST_CODE = "21";
+    const RESP_SESI_EXIST_DESC = "Sesi pada jam tersebut sudah ada/saling beririsan dengan yang lain";
+
+    const RESP_SESI_JAMKEBALIK_CODE = "22";
+    const RESP_SESI_JAMKEBALIK_DESC = "Jam mulai tidak boleh lebih besar atau sama dg Jam selesai";
+
+    const RESP_SESI_JAMNGAWUR_CODE = "23";
+    const RESP_SESI_JAMNGAWUR_DESC = "Format penulisan jam tidak sesuai/salah";
+
     const RESP_DATA_VALIDATE_FAIL_CODE = "02";
     const RESP_DATA_VALIDATE_FAIL_DESC = "Validation Failed";
 

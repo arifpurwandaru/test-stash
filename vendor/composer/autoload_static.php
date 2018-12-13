@@ -319,6 +319,7 @@ class ComposerStaticInitb3b2250393cee3db8d79280613bd14c7
     );
 
     public static $classMap = array (
+        'App\\AntrianInfo' => __DIR__ . '/../..' . '/app/AntrianInfo.php',
         'App\\CommonResponse' => __DIR__ . '/../..' . '/app/CommonResponse.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Constants' => __DIR__ . '/../..' . '/app/Constants.php',
@@ -331,7 +332,7 @@ class ComposerStaticInitb3b2250393cee3db8d79280613bd14c7
         'App\\Http\\Controllers\\MjadwalController' => __DIR__ . '/../..' . '/app/Http/Controllers/MjadwalController.php',
         'App\\Http\\Controllers\\MpasienController' => __DIR__ . '/../..' . '/app/Http/Controllers/MpasienController.php',
         'App\\Http\\Controllers\\MuserController' => __DIR__ . '/../..' . '/app/Http/Controllers/MuserController.php',
-        'App\\Http\\Controllers\\TpendaftaranController' => __DIR__ . '/../..' . '/app/Http/Controllers/Tpendaftaran.php',
+        'App\\Http\\Controllers\\PendaftaranController' => __DIR__ . '/../..' . '/app/Http/Controllers/PendaftaranController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\CheckForMaintenanceMode' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckForMaintenanceMode.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
@@ -348,6 +349,7 @@ class ComposerStaticInitb3b2250393cee3db8d79280613bd14c7
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
+        'App\\SesiPemeriksaan' => __DIR__ . '/../..' . '/app/SesiPemeriksaan.php',
         'App\\Tpendaftaran' => __DIR__ . '/../..' . '/app/Tpendaftaran.php',
         'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
         'Carbon\\CarbonInterval' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterval.php',

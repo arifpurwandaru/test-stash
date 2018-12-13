@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\AntrianInfo' => $baseDir . '/app/AntrianInfo.php',
     'App\\CommonResponse' => $baseDir . '/app/CommonResponse.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Constants' => $baseDir . '/app/Constants.php',
@@ -18,7 +19,7 @@ return array(
     'App\\Http\\Controllers\\MjadwalController' => $baseDir . '/app/Http/Controllers/MjadwalController.php',
     'App\\Http\\Controllers\\MpasienController' => $baseDir . '/app/Http/Controllers/MpasienController.php',
     'App\\Http\\Controllers\\MuserController' => $baseDir . '/app/Http/Controllers/MuserController.php',
-    'App\\Http\\Controllers\\TpendaftaranController' => $baseDir . '/app/Http/Controllers/Tpendaftaran.php',
+    'App\\Http\\Controllers\\PendaftaranController' => $baseDir . '/app/Http/Controllers/PendaftaranController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\CheckForMaintenanceMode' => $baseDir . '/app/Http/Middleware/CheckForMaintenanceMode.php',
     'App\\Http\\Middleware\\EncryptCookies' => $baseDir . '/app/Http/Middleware/EncryptCookies.php',
@@ -35,6 +36,7 @@ return array(
     'App\\Providers\\BroadcastServiceProvider' => $baseDir . '/app/Providers/BroadcastServiceProvider.php',
     'App\\Providers\\EventServiceProvider' => $baseDir . '/app/Providers/EventServiceProvider.php',
     'App\\Providers\\RouteServiceProvider' => $baseDir . '/app/Providers/RouteServiceProvider.php',
+    'App\\SesiPemeriksaan' => $baseDir . '/app/SesiPemeriksaan.php',
     'App\\Tpendaftaran' => $baseDir . '/app/Tpendaftaran.php',
     'Carbon\\Carbon' => $vendorDir . '/nesbot/carbon/src/Carbon/Carbon.php',
     'Carbon\\CarbonInterval' => $vendorDir . '/nesbot/carbon/src/Carbon/CarbonInterval.php',
