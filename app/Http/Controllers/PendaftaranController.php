@@ -33,8 +33,12 @@ class PendaftaranController extends Controller
     }
 
 
-    function getCurrentAntrian($tgl){
-        $tpn = Tpendaftaran::where('jadwal_pendaftaran',$tgl)->max('no_urut');
+    function getCurrentAntrian($tgl,$sesi){
+        
+        $matchThese = ['jadwal_pendaftaran' => $tgl, 
+                    'sesi'=>$sesi];
+
+        $tpn = Tpendaftaran::where($matchThese)->max('no_urut');
                 if($tpn==null){
                     $tpn = 0;
                 }
@@ -58,7 +62,7 @@ class PendaftaranController extends Controller
             }else{
                 $resp->respCode = Constants::RESP_SUCCESS_CODE;
                 $resp->respDesc = Constants::RESP_SUCCESS_DESC;
-                $resp->data = $this->getCurrentAntrian($request->jadwal_pendaftaran);
+                $resp->data = $this->getCurrentAntrian($request->jadwal_pendaftaran, $request->sesi);
             }
 
             
@@ -76,7 +80,7 @@ class PendaftaranController extends Controller
     public function getAllPendaftarByLoginIdAndTgl(Request $request){
         $resp = new CommonResponse();
        try {
-            $asdf = DB::select("select mp.nama,tp.no_urut,tp.status_antrian, tp.jadwal_pendaftaran,tp.id 
+            $asdf = DB::select("select mp.nama,tp.no_urut,tp.status_antrian, tp.jadwal_pendaftaran,tp.id, tp.sesi 
                 from tpendaftarans tp 
                 inner join mpasiens mp on mp.pasienid = tp.pasienid
                 where tp.jadwal_pendaftaran=? and tp.loginid=? and tp.sesi=?
@@ -203,7 +207,7 @@ class PendaftaranController extends Controller
     function resubmitPendaftaran(Request $request){
         $resp = new CommonResponse();
         try{
-            $noUrut = $this->getCurrentAntrian($request->input('jadwal_pendaftaran'));
+            $noUrut = $this->getCurrentAntrian($request->input('jadwal_pendaftaran'),$request->input('sesi'));
             Tpendaftaran::findOrFail($request->input('id'))->update([
                'status_antrian'=>Constants::STATUS_OPEN,
                'no_urut'=>$noUrut
