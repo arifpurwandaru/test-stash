@@ -27,6 +27,7 @@ class CreateMpasiensTable extends Migration
             $table->string('alamatLengkap',200);
             $table->string('pekerjaan',50)->nullable();
             $table->longText('imgLink')->nullable();
+            $table->string("imgLinkTemp",100)->nullable();
             $table->timestamps();
             $table->primary('pasienid');
         });

@@ -21,6 +21,7 @@ class CreateMusersTable extends Migration
             $table->string("status_user",1)->nullable();
             $table->string("alamat", 200)->nullable();
             $table->string("imgLink", 100)->nullable();
+            $table->string("imgLinkTemp",100)->nullable();
             $table->string("deviceId", 100)->nullable();
             $table->timestamps();
             $table->primary("loginid");

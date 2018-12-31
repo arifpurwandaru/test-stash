@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Muser;
 use App\CommonResponse;
 use App\Constants;
+use Mail;
+use View;
 
 class MuserController extends Controller{
     
@@ -65,6 +67,7 @@ class MuserController extends Controller{
             $resp->respCode = Constants::RESP_SUCCESS_CODE;
             $resp->respDesc = Constants::RESP_SUCCESS_DESC;
             $resp->data = Muser::create($request->all());
+            $this->sendEmail($request);
         } catch (\Illuminate\Database\QueryException $e) {
             $resp -> respCode = Constants::RESP_DB_ERROR_CODE;
             $resp -> respDesc = $e->getMessage();
@@ -84,6 +87,7 @@ class MuserController extends Controller{
                 'email'=>$request->input('email'),
                 'alamat'=>$request->input('alamat'),
                 'imgLink'=>$request->input('imgLink'),
+                'imgLinkTemp'=>$request->input('imgLinkTemp'),
             ]);
             $resp -> respCode = Constants::RESP_SUCCESS_CODE;
             $resp -> respDesc = Constants::RESP_SUCCESS_DESC;
@@ -94,11 +98,129 @@ class MuserController extends Controller{
         return response()->json($resp);
     }
 
+    public function updateDp(Request $request) {
+        $resp = new CommonResponse();
+        try{
+            Muser::findOrFail($request->input('loginid'))->update([
+                'imgLinkTemp'=>$request->input('imgLinkTemp'),
+            ]);
+            $resp -> respCode = Constants::RESP_SUCCESS_CODE;
+            $resp -> respDesc = Constants::RESP_SUCCESS_DESC;
+        }catch (\Exception $e) {
+            $resp -> respCode = Constants::RESP_GENERAL_ERROR_CODE;
+            $resp -> respDesc = $e->getMessage();
+        }
+        return response()->json($resp);
+    }
+
+    public function aktifasiUser($loginid)
+    {
+        $resp = new CommonResponse();
+        try{
+            Muser::findOrFail($loginid)->update([
+                'status_user'=>"A",
+            ]);
+            
+        }catch (\Exception $e) {
+            return "Terjadi Kesalahan". $e->getMessage();
+        }
+        return "<h1 style='color:green;'>Aktifasi Berhasil<h1>";
+    }
     public function delete($loginid)
     {
         $muser = Muser::where('loginid',$loginid)->firstOrFail();
         $muser->delete();
 
         return 204;
+    }
+
+    public function sendEmail(Request $request){
+
+        Mail::send([], [], function ($message) use ($request)
+        {
+
+            $message->from('idoctor_noreply@zoho.com', 'Konfirmasi Pendaftaran iDoctor');
+
+            $message->to($request->input('email'))
+             ->subject("Verifikasi Email") 
+            ->setBody("Dear ".$request->input('username').
+                ",\r\n Klik link berikut untuk verifikasi: ".Constants::ENDPOINT_URL."api/muser/verifikasi/".$request->input('loginid'));
+
+        });
+
+
+        return response()->json(['message' => 'Request completed']);
+    }
+
+    public function gantipassword($param){
+        return View::make('gantipass')->with('loginid', $param)->with('errs','');
+    }
+
+    public function updatePass(Request $request){
+        if($request->password == $request->confirmPass){
+            try{
+                Muser::findOrFail($request->loginid)->update([
+                    'password'=>$request->password,
+                ]);
+                
+            }catch (\Exception $e) {
+                return "<h4 style='color:red;'>Terjadi Kesalahan Server: </h4>". $e->getMessage();
+            }
+            return "<h1 style='color:green;'> Password Berhasil Dirubah </h1>";
+        }else{
+            return View::make('gantipass')->with('loginid', $request->loginid)->with('errs','Password Tidak Sesuai');
+        }
+        
+    }
+
+    public function kirimEmailGantiPassword($email){
+        $usr = Muser::where('email',$email)->first();
+
+        $resp = new CommonResponse();
+
+        if($usr == null){
+            $resp -> respCode = Constants::RESP_DATA_NOTFOUND_CODE;
+            $resp -> respDesc = Constants::RESP_DATA_NOTFOUND_DESC;
+        }else{
+            
+            Mail::send([], [], function ($message) use ($usr)
+            {
+
+                $message->from('idoctor_noreply@zoho.com', 'Perubahan Password');
+
+                $message->to($usr->email)
+                ->subject("Rubah Passwordmu") 
+                ->setBody("Dear ".$usr->username.
+                    ",\r\n Klik link berikut untuk Ganti Password: ".Constants::ENDPOINT_URL."api/muser/ganpas/".$usr->loginid);
+
+            });
+
+            $resp -> respCode = Constants::RESP_SUCCESS_CODE;
+            $resp -> respDesc = Constants::RESP_SUCCESS_DESC;
+        }
+
+        return response()->json($resp);
+    }
+
+
+
+
+
+
+
+
+
+
+    public function testSendEmail2(){
+        
+        Mail::send([], [], function ($message) {
+
+            $message->from('idoctor_noreply@zoho.com', 'Test Title');
+
+            $message->to("arif.purwandaru@gmail.com")
+            ->subject("Rubah Passwordmu") 
+            ->setBody("Dear Klik link berikut untuk Ganti Password: ");
+
+        });
     }
 }

@@ -2,6 +2,11 @@
 namespace App;
 
 class Constants{
+    //const ENDPOINT_URL = "https://idoctor.masjidjabirsorowajan.com/";
+
+    
+    const ENDPOINT_URL = "http://192.168.1.9:8000/";
+
     const RESP_SUCCESS_CODE = "00";
     const RESP_SUCCESS_DESC = "success";
 

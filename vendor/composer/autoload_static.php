@@ -320,6 +320,7 @@ class ComposerStaticInitb3b2250393cee3db8d79280613bd14c7
 
     public static $classMap = array (
         'App\\AntrianInfo' => __DIR__ . '/../..' . '/app/AntrianInfo.php',
+        'App\\Carousel' => __DIR__ . '/../..' . '/app/Carousel.php',
         'App\\CommonResponse' => __DIR__ . '/../..' . '/app/CommonResponse.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Constants' => __DIR__ . '/../..' . '/app/Constants.php',
@@ -355,6 +356,7 @@ class ComposerStaticInitb3b2250393cee3db8d79280613bd14c7
         'Carbon\\CarbonInterval' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterval.php',
         'Carbon\\Exceptions\\InvalidDateException' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Exceptions/InvalidDateException.php',
         'Carbon\\Translator' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Translator.php',
+        'CarouselTableSeeder' => __DIR__ . '/../..' . '/database/seeds/CarouselTableSeeder.php',
         'Cron\\AbstractField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/AbstractField.php',
         'Cron\\CronExpression' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/CronExpression.php',
         'Cron\\DayOfMonthField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/DayOfMonthField.php',

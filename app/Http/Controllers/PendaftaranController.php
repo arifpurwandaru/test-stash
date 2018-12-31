@@ -146,7 +146,7 @@ class PendaftaranController extends Controller
     public function getAllAntrianByDateAndStatus($tgl,$status,$sesi){
         $resp = new CommonResponse();
         try{
-            $asdf = DB::select("select p.*, ps.nama, ps.imgLink, ps.alamatLengkap, ps.jenisKelamin, ps.golonganDarah, ps.nik 
+            $asdf = DB::select("select p.*, ps.nama, ps.imgLink, ps.imgLinkTemp, ps.alamatLengkap, ps.jenisKelamin, ps.golonganDarah, ps.nik 
                         from tpendaftarans p
                         inner join mpasiens ps on ps.pasienid = p.pasienid
                         where p.jadwal_pendaftaran=? and p.status_antrian=? and p.sesi=?
@@ -227,7 +227,7 @@ class PendaftaranController extends Controller
     public function getRiwayatKunjunganTerakhir($loginid){
         $resp = new CommonResponse();
         try{
-            $asdf = DB::select("select trx.pasienid, p.nama, p.imgLink, bridge.jadwal_pendaftaran
+            $asdf = DB::select("select trx.pasienid, p.nama, p.imgLink, p.imgLinkTemp, bridge.jadwal_pendaftaran
             from tpendaftarans trx
             inner join mpasiens p on p.pasienid = trx.pasienid
             inner join 
@@ -236,7 +236,7 @@ class PendaftaranController extends Controller
                     where loginid=? 
                     and status_antrian=1
                     group by pasienid) bridge on bridge.pasienid = trx.pasienid
-            group by trx.pasienid, p.nama, p.imgLink, bridge.jadwal_pendaftaran",
+            group by trx.pasienid, p.nama, p.imgLink, p.imgLinkTemp, bridge.jadwal_pendaftaran",
                         [$loginid]);
           
             if($asdf==null){
@@ -264,7 +264,7 @@ class PendaftaranController extends Controller
     public function getDetailRiwayatPemeriksaan($pasienid, $tgl){
         $resp = new CommonResponse();
         try{
-            $asdf = DB::select("select p.nama, p.tglLahir, p.imgLink, p.jenisKelamin, p.golonganDarah, trx.catatan_medis, trx.jadwal_pendaftaran, trx.keluhan
+            $asdf = DB::select("select p.nama, p.tglLahir, p.imgLink, p.imgLinkTemp, p.jenisKelamin, p.golonganDarah, trx.catatan_medis, trx.jadwal_pendaftaran, trx.keluhan
             from tpendaftarans trx
             inner join mpasiens p on p.pasienid = trx.pasienid
             where trx.pasienid=?
@@ -310,7 +310,7 @@ class PendaftaranController extends Controller
             }
              
 
-            $asdf = DB::select("select p.*, ps.nama, ps.imgLink, ps.alamatLengkap, ps.jenisKelamin, ps.golonganDarah, ps.nik 
+            $asdf = DB::select("select p.*, ps.nama, ps.imgLink, ps.imgLinkTemp, ps.alamatLengkap, ps.jenisKelamin, ps.golonganDarah, ps.nik 
                         from tpendaftarans p
                         inner join mpasiens ps on ps.pasienid = p.pasienid
                         where p.id=?",

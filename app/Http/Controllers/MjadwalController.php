@@ -90,6 +90,8 @@ class MjadwalController extends Controller
         $resp = new CommonResponse();
         try{
             $result =  MjadwalParent::with(['sesis' => function ($q) {
+                $sekarang = new DateTime();
+                $q->where('selesai','>',$sekarang->format('H:i'));
                 $q->orderBy('mulai', 'asc');
               }])->where('id',$parentId)->first();
             $resp->respCode = Constants::RESP_SUCCESS_CODE;

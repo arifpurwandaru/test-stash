@@ -75,6 +75,25 @@ class MpasienController extends Controller{
                 'golonganDarah'=>$request->input('golonganDarah'),
                 'alamatLengkap'=>$request->input('alamatLengkap'),
                 'imgLink'=>$request->input('imgLink'),
+                'imgLinkTemp'=>$request->input('imgLinkTemp'),
+
+            ]);
+            $resp -> respCode = Constants::RESP_SUCCESS_CODE;
+            $resp -> respDesc = Constants::RESP_SUCCESS_DESC;
+        }catch (\Exception $e) {
+            $resp -> respCode = Constants::RESP_GENERAL_ERROR_CODE;
+            $resp -> respDesc = $e->getMessage();
+        }
+        return response()->json($resp);
+    }
+
+
+    
+    function updateDp(Request $request){
+        $resp = new CommonResponse();
+        try{
+            Mpasien::findOrFail($request->input('pasienid'))->update([
+                'imgLinkTemp'=>$request->input('imgLinkTemp'),
 
             ]);
             $resp -> respCode = Constants::RESP_SUCCESS_CODE;

@@ -10,7 +10,7 @@ class Mpasien extends Model
     
     protected $fillable = ['pasienid', 'nama','jenisKelamin','nik','loginid',
             'email','tglLahir','umur','golonganDarah',
-            'statusPernikahan','alamatLengkap','pekerjaan', 'imgLink'];
+            'statusPernikahan','alamatLengkap','pekerjaan', 'imgLink','imgLinkTemp'];
 
             protected $casts = [
                 'pasienid' => 'string'

@@ -22,14 +22,27 @@ Route::get('muser', 'MuserController@index');
 Route::get('muser/{userId}', 'MuserController@show');
 Route::post('muser', 'MuserController@store');
 Route::post('muser/update', 'MuserController@update');
+Route::post('muser/updateDp', 'MuserController@updateDp');
 Route::delete('muser/{userId}', 'MuserController@delete');
 Route::post('login','MuserController@login');
+Route::post('muser/sendEmail', 'MuserController@sendEmail');
+Route::post('muser/okgantipas','MuserController@updatePass');
+Route::get('muser/verifikasi/{loginid}','MuserController@aktifasiUser');
+Route::get('muser/ganpas/{param}','MuserController@gantipassword');
+Route::get('muser/kirimEmailGantiPassword/{email}','MuserController@kirimEmailGantiPassword');
+
+Route::get('muser/jangkrik/testSendEmail2','MuserController@testSendEmail2');
+
+
+Route::get('caro/getAll','CarouselController@getAll');
+Route::post('caro/update', 'CarouselController@update');
 
 
 Route::post('mpasien','MpasienController@store');
 Route::get('mpasien/{loginid}','MpasienController@getByLoginId');
 Route::get('mpasien/getOne/{pasienid}','MpasienController@getOne');
 Route::post('mpasien/update','MpasienController@update');
+Route::post('mpasien/updateDp','MpasienController@updateDp');
 
 Route::post('mjadwal/simpanJadwal','MjadwalController@simpanJadwal');
 Route::get('mjadwal','MjadwalController@index');
