@@ -48,6 +48,7 @@ Route::post('mjadwal/simpanJadwal','MjadwalController@simpanJadwal');
 Route::get('mjadwal','MjadwalController@index');
 Route::get('mjadwal/getAllMjadwal','MjadwalController@getAllMjadwal');
 Route::get('mjadwal/getOne/{parentId}','MjadwalController@getOneWithChildren');
+Route::get('mjadwal/getSesiByParentFilterByJam/{parentId}','MjadwalController@getSesiByParentFilterByJam');
 Route::get('mjadwal/genocide/{parentId}','MjadwalController@deleteAndGenocide');
 Route::get('mjadwal/deleteSesi/{sesiId}','MjadwalController@deleteSesi');
 Route::get('mjadwal/getByTgl/{tgl}','MjadwalController@getByTgl');

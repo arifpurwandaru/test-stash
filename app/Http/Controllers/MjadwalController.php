@@ -91,7 +91,6 @@ class MjadwalController extends Controller
         try{
             $result =  MjadwalParent::with(['sesis' => function ($q) {
                 $sekarang = new DateTime();
-                $q->where('selesai','>',$sekarang->format('H:i'));
                 $q->orderBy('mulai', 'asc');
               }])->where('id',$parentId)->first();
             $resp->respCode = Constants::RESP_SUCCESS_CODE;
@@ -110,6 +109,29 @@ class MjadwalController extends Controller
         return response()->json($resp);
     }
 
+    function getSesiByParentFilterByJam($parentId){
+        $resp = new CommonResponse();
+        try{
+            $result =  MjadwalParent::with(['sesis' => function ($q) {
+                $sekarang = new DateTime();
+                $q->where('selesai','>',$sekarang->format('H:i'));
+                $q->orderBy('mulai', 'asc');
+              }])->where('id',$parentId)->first();
+            $resp->respCode = Constants::RESP_SUCCESS_CODE;
+            $resp->data = $result;
+            if($result == null){
+                $resp->respCode = Constants::RESP_DATA_NOTFOUND_CODE;
+                $resp->respDesc = Constants::RESP_DATA_NOTFOUND_DESC;
+            }
+        }catch (\Illuminate\Database\QueryException $e) {
+            $resp -> respCode = Constants::RESP_DB_ERROR_CODE;
+            $resp -> respDesc = $e->getMessage();
+        } catch (\Exception $e) {
+            $resp -> respCode = Constants::RESP_GENERAL_ERROR_CODE;
+            $resp -> respDesc = $e->getMessage();
+        }
+        return response()->json($resp);
+    }
 
     function index(){
         $resp = new CommonResponse();

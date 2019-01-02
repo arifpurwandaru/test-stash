@@ -307,6 +307,10 @@ class PendaftaranController extends Controller
                 Tpendaftaran::findOrFail($request->input('id'))->update([
                     'obat'=>$request->input('obat'),
                 ]);
+            }else if($whatfield == 'Catatan Medis'){
+                Tpendaftaran::findOrFail($request->input('id'))->update([
+                    'catatan_medis'=>$request->input('catatan_medis'),
+                ]);
             }
              
 
