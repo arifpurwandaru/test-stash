@@ -48,10 +48,10 @@ Route::post('mjadwal/simpanJadwal','MjadwalController@simpanJadwal');
 Route::get('mjadwal','MjadwalController@index');
 Route::get('mjadwal/getAllMjadwal','MjadwalController@getAllMjadwal');
 Route::get('mjadwal/getOne/{parentId}','MjadwalController@getOneWithChildren');
-Route::get('mjadwal/getSesiByParentFilterByJam/{parentId}','MjadwalController@getSesiByParentFilterByJam');
 Route::get('mjadwal/genocide/{parentId}','MjadwalController@deleteAndGenocide');
 Route::get('mjadwal/deleteSesi/{sesiId}','MjadwalController@deleteSesi');
 Route::get('mjadwal/getByTgl/{tgl}','MjadwalController@getByTgl');
+Route::get('mjadwal/getSesiByParentFilterByJam/{tgl}','MjadwalController@getSesiByParentFilterByJam');
 
 Route::post('tpendaftaran','PendaftaranController@store');
 Route::post('tpendaftaran/validateDuplicate','PendaftaranController@validateDuplicateAndSelectMaxNoUrut');
@@ -66,3 +66,9 @@ Route::get('tpendaftaran/getRiwayatKunjunganTerakhir/{loginid}','PendaftaranCont
 Route::get('tpendaftaran/getDetailRiwayatPemeriksaan/{loginid}/{tgl}','PendaftaranController@getDetailRiwayatPemeriksaan');
 Route::get('tpendaftaran/aktifkanKembali/{id}','PendaftaranController@aktifkanKembali');
 
+
+Route::get('tagihan/inquiry','TagihanController@inquiry');
+
+
+//test api
+Route::get('mjadwal/testTesan/{tgl}','MjadwalController@testTesan');

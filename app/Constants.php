@@ -36,4 +36,11 @@ class Constants{
     const STATUS_DONE="1";
     const STATUS_SKIP="2";
 
+    //status pembayaran
+    const BLM_DIBAYAR="0";
+    const SDH_DIBAYAR="1";
+
+    //sys config
+    const FEE_PASIEN="FEE_PASIEN";
+
 }

@@ -109,17 +109,24 @@ class MjadwalController extends Controller
         return response()->json($resp);
     }
 
-    function getSesiByParentFilterByJam($parentId){
+    function getSesiByParentFilterByJam($tgl){
         $resp = new CommonResponse();
         try{
-            $result =  MjadwalParent::with(['sesis' => function ($q) {
-                $sekarang = new DateTime();
-                $q->where('selesai','>',$sekarang->format('H:i'));
-                $q->orderBy('mulai', 'asc');
-              }])->where('id',$parentId)->first();
+            $parentId = $this->extractDayOfWeek($tgl);
+            if($this->dateDiffFromToday($tgl)==0){
+                $resp->data = MjadwalParent::with(['sesis' => function ($q) {
+                    $sekarang = new DateTime();
+                    $q->where('selesai','>',$sekarang->format('H:i'));
+                    $q->orderBy('mulai', 'asc');
+                  }])->where('id',$parentId)->first();
+            }else{
+                $resp->data = MjadwalParent::with(['sesis' => function ($q) {
+                    $q->orderBy('mulai', 'asc');
+                  }])->where('id',$parentId)->first();
+            }
+
             $resp->respCode = Constants::RESP_SUCCESS_CODE;
-            $resp->data = $result;
-            if($result == null){
+            if($resp->data == null){
                 $resp->respCode = Constants::RESP_DATA_NOTFOUND_CODE;
                 $resp->respDesc = Constants::RESP_DATA_NOTFOUND_DESC;
             }
@@ -138,9 +145,6 @@ class MjadwalController extends Controller
         try{
             $resp->respCode = Constants::RESP_SUCCESS_CODE;
             $resp->respDesc = Constants::RESP_SUCCESS_DESC;
-            /* foreach($listparent as $rmn){
-                $rmn->sesis = SesiPemeriksaan::where('mjadwal_parent_id',$rmn->id)->get();
-            } */
             $resp->data = MjadwalParent::with('sesis')->get();
         }catch (\Illuminate\Database\QueryException $e) {
             $resp -> respCode = Constants::RESP_DB_ERROR_CODE;
@@ -199,25 +203,6 @@ class MjadwalController extends Controller
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
     function getAllMjadwal(){
         $resp = new CommonResponse();
@@ -254,6 +239,32 @@ class MjadwalController extends Controller
             $resp -> respCode = Constants::RESP_GENERAL_ERROR_CODE;
             $resp -> respDesc = $e->getMessage();
         }
+        return response()->json($resp);
+    }
+
+    //0=sameday, +1=tomorrow, -1=yesterday
+    function dateDiffFromToday($tgl){
+        $today = new DateTime(); 
+        $today->setTime( 0, 0, 0 );
+        
+        $dateObj = DateTime::createFromFormat("Y-m-d",$tgl);
+        $dateObj->setTime(0,0,0);
+        $diff = $today->diff($dateObj);
+        return (integer)$diff->format( "%R%a" );
+
+    }
+    
+    function extractDayOfWeek($tgl){
+        $day = DateTime::createFromFormat("Y-m-d",$tgl)->format('N');
+        if($day==7){
+            return 1;
+        }
+        return $day+1; 
+    }
+    function testTesan($tgl){
+        $resp = new CommonResponse();
+        
+        $resp->data = $this->extractDayOfWeek($tgl);
         return response()->json($resp);
     }
 }

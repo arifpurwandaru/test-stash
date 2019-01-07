@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Muser;
 use App\CommonResponse;
 use App\Constants;
+use App\Sysconfig;
 use Mail;
 use View;
 
@@ -71,6 +72,9 @@ class MuserController extends Controller{
         } catch (\Illuminate\Database\QueryException $e) {
             $resp -> respCode = Constants::RESP_DB_ERROR_CODE;
             $resp -> respDesc = $e->getMessage();
+            if($e->errorInfo[0] == '23000'){
+                $resp -> respDesc = "Email ".$request->email." Sudah terdaftar di system";
+            }
         } catch (\Exception $e) {
             $resp -> respCode = Constants::RESP_GENERAL_ERROR_CODE;
             $resp -> respDesc = $e->getMessage();
@@ -138,13 +142,14 @@ class MuserController extends Controller{
 
         Mail::send([], [], function ($message) use ($request)
         {
+            $sysconfig = Sysconfig::where('configKey','ENDPOINT_URL')->first();
 
             $message->from('idoctor_noreply@zoho.com', 'Konfirmasi Pendaftaran iDoctor');
 
             $message->to($request->input('email'))
              ->subject("Verifikasi Email") 
             ->setBody("Dear ".$request->input('username').
-                ",\r\n Klik link berikut untuk verifikasi: ".Constants::ENDPOINT_URL."api/muser/verifikasi/".$request->input('loginid'));
+                ",\r\n Klik link berikut untuk verifikasi: ".$sysconfig->configValue."api/muser/verifikasi/".$request->input('loginid'));
 
         });
 
@@ -185,13 +190,14 @@ class MuserController extends Controller{
             
             Mail::send([], [], function ($message) use ($usr)
             {
+                $sysconfig = Sysconfig::where('configKey','ENDPOINT_URL')->first();
 
                 $message->from('idoctor_noreply@zoho.com', 'Perubahan Password');
 
                 $message->to($usr->email)
                 ->subject("Rubah Passwordmu") 
                 ->setBody("Dear ".$usr->username.
-                    ",\r\n Klik link berikut untuk Ganti Password: ".Constants::ENDPOINT_URL."api/muser/ganpas/".$usr->loginid);
+                    ",\r\n Klik link berikut untuk Ganti Password: ".$sysconfig->configValue."api/muser/ganpas/".$usr->loginid);
 
             });
 
