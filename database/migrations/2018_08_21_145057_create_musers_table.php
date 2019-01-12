@@ -17,7 +17,8 @@ class CreateMusersTable extends Migration
             $table->string("loginid",60);
             $table->string("username",100);
             $table->string("password",40);
-            $table->string("email",30)->unique();
+            $table->string("email",50)->unique();
+            $table->string('noHp',30)->nullable();
             $table->string("status_user",1)->nullable();
             $table->string("alamat", 200)->nullable();
             $table->string("imgLink", 100)->nullable();

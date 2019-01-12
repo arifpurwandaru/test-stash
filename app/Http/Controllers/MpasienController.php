@@ -71,6 +71,7 @@ class MpasienController extends Controller{
                 'jenisKelamin'=>$request->input('jenisKelamin'),
                 'nik'=>$request->input('nik'),
                 'email'=>$request->input('email'),
+                'noHp'=>$request->input('noHp'),
                 'tglLahir'=>$request->input('tglLahir'),
                 'golonganDarah'=>$request->input('golonganDarah'),
                 'alamatLengkap'=>$request->input('alamatLengkap'),

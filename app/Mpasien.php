@@ -9,7 +9,7 @@ class Mpasien extends Model
     protected $primaryKey = 'pasienid';
     
     protected $fillable = ['pasienid', 'nama','jenisKelamin','nik','loginid',
-            'email','tglLahir','umur','golonganDarah',
+            'email','noHp','tglLahir','umur','golonganDarah',
             'statusPernikahan','alamatLengkap','pekerjaan', 'imgLink','imgLinkTemp'];
 
             protected $casts = [

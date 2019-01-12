@@ -19,7 +19,8 @@ class CreateMpasiensTable extends Migration
             $table->string('nama',50);
             $table->string('jenisKelamin',1);
             $table->string('nik',16);
-            $table->string('email',225)->nullable();
+            $table->string('email',50)->nullable();
+            $table->string('noHp',30)->nullable();
             $table->date('tglLahir')->nullable();
             $table->integer('umur')->nullable();
             $table->string('golonganDarah',2)->nullable();

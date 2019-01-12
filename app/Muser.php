@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Muser extends Model{
     public $primaryKey = 'loginid';
-    protected $fillable = ['loginid', 'username','password','email','status_user','alamat','imgLink','imgLinkTemp','deviceId'];
+    protected $fillable = ['loginid', 'username','password','email','noHp','status_user','alamat','imgLink','imgLinkTemp','deviceId'];
 
     protected $casts = [
         'loginid' => 'string'

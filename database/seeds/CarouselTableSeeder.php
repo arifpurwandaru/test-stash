@@ -14,20 +14,20 @@ class CarouselTableSeeder extends Seeder
         Carousel::truncate();
 
         Carousel::create([
-            'imgLink' => 'carousel1.png',
+            'imgLink' => 'azzaky1.jpeg',
         ]);
 
         
         Carousel::create([
-            'imgLink' => 'carousel2.jpg',
+            'imgLink' => 'azzaky2.jpeg',
         ]);
         
         Carousel::create([
-            'imgLink' => 'carousel3.jpg',
+            'imgLink' => 'azzaky3.jpeg',
         ]);
         
         Carousel::create([
-            'imgLink' => 'carousel4.jpg',
+            'imgLink' => 'azzaky4.jpeg',
         ]);
          
     }
